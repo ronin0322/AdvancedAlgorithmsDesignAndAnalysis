@@ -39,19 +39,22 @@ func Output() {
 	// res := []int{5, 4, 3, 2, 1}
 	// bsort(res)
 	// log.Println(res)
-	n := 1000000
+	n := 99
 	wg := sync.WaitGroup{}
 	wg.Add(2)
-	nums := generate(n)
-	// log.Println(nums)
-	a, b := make([]int, n), make([]int, n)
-	copy(a, nums)
-	copy(b, nums)
-	log.Println(b[0])
-	log.Println(a[0])
-	go bsort(a, &wg)
-	go qsort(b, &wg)
+	nodes := generateNode(n, n)
+	ns := NewNodeSet(nodes)
+	// log.Println(" ", nodes)
+	go func() {
+		ns.SimpleFindConvexHull()
+		log.Println("SimpleFindConvexHull    ", ns.ConvexHullPrint())
+		wg.Done()
+	}()
+	go func() {
+		ns.GrahamScanFindConvexHull()
+		log.Println("GrahamScanFindConvexHull", ns.ConvexHullPrint())
+		wg.Done()
+	}()
 	wg.Wait()
-	log.Println(b[0])
-	log.Println(a[0])
+
 }
