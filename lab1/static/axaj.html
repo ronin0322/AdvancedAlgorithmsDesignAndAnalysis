@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+function myFunction(myArr,index) {
+  var out = "";
+  var i;
+  var c=document.getElementById("myCanvas"+index);
+  var cxt=c.getContext("2d");
+  cxt.clearRect(0,0,c.width,c.height);
+
+  
+  cxt.fillStyle="#0000FF";
+  for(i = 0; i < myArr[index+3].length; i++) {
+    cxt.beginPath();
+    cxt.arc(10+myArr[index+3][i].x*10,10+myArr[index+3][i].y*10,5,0,Math.PI*2,true);
+    cxt.closePath();
+    cxt.fill()
+  }
+  
+  cxt.fillStyle="#FF0000";
+  cxt.moveTo(10+myArr[index][0].x*10,10+myArr[index][0].y*10)
+  for(i = 0; i < myArr[index].length; i++) {
+    // cxt.beginPath();
+    cxt.lineTo(10+myArr[index][i].x*10,10+myArr[index][i].y*10);
+    // cxt.closePath();
+    // cxt.fill()
+  }
+  cxt.lineTo(10+myArr[index][0].x*10,10+myArr[index][0].y*10);
+  cxt.stroke();
+
+  cxt.fillStyle="#FF0000";
+  for(i = 0; i < myArr[index].length; i++) {
+    cxt.beginPath();
+    cxt.arc(10+myArr[index][i].x*10,10+myArr[index][i].y*10,5,0,Math.PI*2,true);
+    cxt.closePath();
+    cxt.fill()
+  }
+
+}
+
+function loadXMLDoc()
+{
+  var xmlhttp;
+  if (window.XMLHttpRequest)
+  {
+    // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+    xmlhttp=new XMLHttpRequest();
+  }
+  else
+  {
+    // IE6, IE5 浏览器执行代码
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function()
+  {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+      var myArr = JSON.parse(this.responseText);
+      document.getElementById("myDiv").innerHTML="ok";
+      myFunction(myArr,0)
+      myFunction(myArr,1)
+      myFunction(myArr,2)
+    }
+  }
+  xmlhttp.open("GET","http://localhost:8080/lab1",true);
+  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xmlhttp.send();
+}
+
+</script>
+</head>
+<body>
+
+<h2>AJAX JSON</h2>
+<button type="button" onclick="loadXMLDoc()">请求 JSON 数据</button>
+<div id="myDiv"></div>
+<h2>SimpleFindConvexHull</h2>
+<canvas id="myCanvas0" width="1010" height="1010" style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+    
+<h2>GrahamScanFindConvexHull</h2>
+<canvas id="myCanvas1" width="1010" height="1010" style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+
+<h2>DivideAndConquerFindConvexHull</h2>
+<canvas id="myCanvas2" width="1010" height="1010" style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+</body>
+</html>

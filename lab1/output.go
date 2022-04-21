@@ -31,6 +31,10 @@ func qsort(a []int, wg *sync.WaitGroup) {
 	sort.Ints(a)
 	wg.Done()
 }
+func InitNode(n int) []Node {
+	return generateNode(n, n)
+}
+
 func Output() {
 	// f, _ := os.OpenFile("cpu.pprof", os.O_CREATE|os.O_RDWR, 0644)
 	// defer f.Close()

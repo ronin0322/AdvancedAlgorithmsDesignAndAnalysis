@@ -2,6 +2,7 @@ package lab1
 
 import (
 	"math/rand"
+	"sort"
 	"time"
 )
 
@@ -45,4 +46,30 @@ func getPolarAngle(i, j, k PolarAngleNode) int {
 
 func calcuArea(i, j, k Node) int {
 	return i.x*j.y + k.x*i.y + j.x*k.y - k.x*j.y - j.x*i.y - i.x*k.y
+}
+
+func SortPolarAngleNodes(nodes []Node) []PolarAngleNode {
+	pole, min := 0, nodes[0].y
+	for i := range nodes {
+		if nodes[i].y < min {
+			min = nodes[i].y
+			pole = i
+		}
+	}
+
+	polarAngleNodes := make([]PolarAngleNode, len(nodes))
+	for i := range polarAngleNodes {
+		polarAngleNodes[i] = PolarAngleNode{
+			prevLocation: i,
+		}
+		polarAngleNodes[i].x = nodes[i].x
+		polarAngleNodes[i].y = nodes[i].y
+	}
+	polarAngleNodes[0], polarAngleNodes[pole] = polarAngleNodes[pole], polarAngleNodes[0]
+	b := polarAngleNodes[1:]
+	sort.Slice(b, func(i, j int) bool {
+		return getPolarAngle(b[i], b[j], polarAngleNodes[0]) > 0
+	})
+
+	return polarAngleNodes
 }

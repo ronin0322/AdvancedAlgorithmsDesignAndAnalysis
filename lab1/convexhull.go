@@ -1,9 +1,5 @@
 package lab1
 
-import (
-	"sort"
-)
-
 type Node struct {
 	x, y int
 }
@@ -11,6 +7,14 @@ type NodeSet struct {
 	cap        int
 	Nodes      []Node
 	ConvexHull []bool
+}
+
+func (ns *NodeSet) GetNode() [][]int {
+	res := make([][]int, ns.cap)
+	for i, j := range ns.Nodes {
+		res[i] = []int{j.x, j.y}
+	}
+	return res
 }
 
 func NewNodeSet(nodes []Node) *NodeSet {
@@ -29,10 +33,17 @@ func (ns *NodeSet) convexHullInit(flag bool) {
 }
 func (ns *NodeSet) ConvexHullPrint() []int {
 	res := make([]int, 0, ns.cap)
+	nodes := make([]Node, 0, ns.cap)
+	location := make([]int, 0, ns.cap)
 	for i := range ns.ConvexHull {
 		if ns.ConvexHull[i] {
-			res = append(res, i)
+			nodes = append(nodes, ns.Nodes[i])
+			location = append(location, i)
 		}
+	}
+	PolarAngleNodes := SortPolarAngleNodes(nodes)
+	for _, j := range PolarAngleNodes {
+		res = append(res, location[j.prevLocation])
 	}
 	return res
 }
@@ -67,27 +78,8 @@ type PolarAngleNode struct {
 
 func (ns *NodeSet) GrahamScanFindConvexHull() {
 	ns.convexHullInit(false)
-	pole, min := 0, ns.Nodes[0].y
-	for i := range ns.Nodes {
-		if ns.Nodes[i].y < min {
-			min = ns.Nodes[i].y
-			pole = i
-		}
-	}
 
-	polarAngleNodes := make([]PolarAngleNode, ns.cap)
-	for i := range polarAngleNodes {
-		polarAngleNodes[i] = PolarAngleNode{
-			prevLocation: i,
-		}
-		polarAngleNodes[i].x = ns.Nodes[i].x
-		polarAngleNodes[i].y = ns.Nodes[i].y
-	}
-	polarAngleNodes[0], polarAngleNodes[pole] = polarAngleNodes[pole], polarAngleNodes[0]
-	b := polarAngleNodes[1:]
-	sort.Slice(b, func(i, j int) bool {
-		return getPolarAngle(b[i], b[j], polarAngleNodes[0]) > 0
-	})
+	polarAngleNodes := SortPolarAngleNodes(ns.Nodes)
 
 	stack := make([]PolarAngleNode, 0, len(polarAngleNodes))
 
