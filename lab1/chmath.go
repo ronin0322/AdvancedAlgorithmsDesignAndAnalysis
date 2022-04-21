@@ -42,3 +42,7 @@ func isInTriangle(z, i, j, k Node) bool {
 func getPolarAngle(i, j, k PolarAngleNode) int {
 	return ((i.x-k.x)*(j.y-k.y) - (j.x-k.x)*(i.y-k.y))
 }
+
+func calcuArea(i, j, k Node) int {
+	return i.x*j.y + k.x*i.y + j.x*k.y - k.x*j.y - j.x*i.y - i.x*k.y
+}

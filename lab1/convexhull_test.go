@@ -31,4 +31,11 @@ func ConvexHullAlgorithms(nodes []Node, t *testing.T) {
 		t.Log("Nodes", nodes)
 		t.Log("GrahamScanConvexHull", resp)
 	}
+	t.Log("TestDivideAndConquerFindConvexHull")
+	{
+		ns.DivideAndConquerFindConvexHull()
+		resp := ns.ConvexHull
+		t.Log("Nodes", nodes)
+		t.Log("DivideAndConquerFindConvexHull", resp)
+	}
 }

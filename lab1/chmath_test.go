@@ -29,3 +29,17 @@ func TestGenerateNode(t *testing.T) {
 		// }
 	}
 }
+func TestCalcuArea(t *testing.T) {
+
+	// res := true
+	t.Log("TestCalcuArea")
+	{
+		resp := generateNode(3, 10)
+		t.Log(resp, calcuArea(resp[0], resp[1], resp[2]))
+		// if resp == res {
+		// 	t.Log("correct", resp)
+		// } else {
+		// 	t.Error("error", resp)
+		// }
+	}
+}

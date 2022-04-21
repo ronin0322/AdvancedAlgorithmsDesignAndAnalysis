@@ -41,18 +41,23 @@ func Output() {
 	// log.Println(res)
 	n := 99
 	wg := sync.WaitGroup{}
-	wg.Add(2)
+	wg.Add(3)
 	nodes := generateNode(n, n)
 	ns := NewNodeSet(nodes)
 	// log.Println(" ", nodes)
 	go func() {
 		ns.SimpleFindConvexHull()
-		log.Println("SimpleFindConvexHull    ", ns.ConvexHullPrint())
+		log.Println("SimpleFindConvexHull          ", ns.ConvexHullPrint())
 		wg.Done()
 	}()
 	go func() {
 		ns.GrahamScanFindConvexHull()
-		log.Println("GrahamScanFindConvexHull", ns.ConvexHullPrint())
+		log.Println("GrahamScanFindConvexHull      ", ns.ConvexHullPrint())
+		wg.Done()
+	}()
+	go func() {
+		ns.DivideAndConquerFindConvexHull()
+		log.Println("DivideAndConquerFindConvexHull", ns.ConvexHullPrint())
 		wg.Done()
 	}()
 	wg.Wait()

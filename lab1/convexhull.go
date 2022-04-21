@@ -106,3 +106,39 @@ func (ns *NodeSet) GrahamScanFindConvexHull() {
 		ns.ConvexHull[stack[i].prevLocation] = true
 	}
 }
+
+func (ns *NodeSet) Divide(l, r int, isMax int) {
+	maxArea, maxIndex := 0, 0
+	for i := range ns.Nodes {
+		if i == l || i == r {
+			continue
+		}
+		if isMax*calcuArea(ns.Nodes[l], ns.Nodes[r], ns.Nodes[i]) > maxArea {
+			maxArea = isMax * calcuArea(ns.Nodes[l], ns.Nodes[r], ns.Nodes[i])
+			maxIndex = i
+		}
+	}
+	if maxArea == 0 {
+		return
+	}
+	ns.ConvexHull[maxIndex] = true
+	ns.Divide(l, maxIndex, isMax)
+	ns.Divide(maxIndex, r, isMax)
+}
+
+func (ns *NodeSet) DivideAndConquerFindConvexHull() {
+	ns.convexHullInit(false)
+	xMin, xMax := 0, 0
+	for i := range ns.Nodes {
+		if ns.Nodes[i].x < ns.Nodes[xMin].x {
+			xMin = i
+		}
+		if ns.Nodes[i].x > ns.Nodes[xMax].x {
+			xMax = i
+		}
+	}
+	ns.ConvexHull[xMin], ns.ConvexHull[xMax] = true, true
+	ns.Divide(xMin, xMax, 1)
+	ns.Divide(xMin, xMax, -1)
+
+}
