@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+function myFunction(myArr,index) {
+  var out = "";
+  var i;
+  var c=document.getElementById("myCanvas"+index);
+  var cxt=c.getContext("2d");
+  var n,m;
+  cxt.clearRect(0,0,c.width,c.height);
+  n = myArr.barrier.length
+  m = myArr.barrier[0].length
+  var lar;
+  lar = 20;
+  cxt.fillStyle="#F0FFFF";
+  for(i = 0; i < n; i++) {
+    for (j=0;j<m;j++){
+      cxt.beginPath();
+      cxt.arc(10+j*lar,10+i*lar,5,0,Math.PI*2,true);
+      cxt.closePath();
+      cxt.fill()
+    }
+  }
+
+  cxt.fillStyle="#00FFFF";
+  for(i = 0; i < n; i++) {
+    for (j=0;j<m;j++){
+      if (myArr.river[i][j] == 1) {
+        cxt.beginPath();
+        cxt.arc(10+j*lar,10+i*lar,5,0,Math.PI*2,true);
+        cxt.closePath();
+        cxt.fill()
+      } 
+    }
+  }
+
+  cxt.fillStyle="#FFFF00";
+  for(i = 0; i < n; i++) {
+    for (j=0;j<m;j++){
+      if (myArr.desert[i][j] == 1) {
+        cxt.beginPath();
+        cxt.arc(10+j*lar,10+i*lar,5,0,Math.PI*2,true);
+        cxt.closePath();
+        cxt.fill()
+      } 
+    }
+  }
+  cxt.fillStyle="#000000";
+  for(i = 0; i < n; i++) {
+    for (j=0;j<m;j++){
+      if (myArr.barrier[i][j] == 1) {
+        cxt.beginPath();
+        cxt.arc(10+j*lar,10+i*lar,5,0,Math.PI*2,true);
+        cxt.closePath();
+        cxt.fill()
+      } 
+    }
+  }
+  cxt.fillStyle="#FF0000";
+  cxt.beginPath();
+  cxt.arc(10+myArr.start[1]*lar,10+myArr.start[0]*lar,3,0,Math.PI*2,true);
+  cxt.closePath();
+  cxt.fill()
+
+  cxt.fillStyle="#FF0000";
+  cxt.beginPath();
+  cxt.arc(10+myArr.terminal[1]*lar,10+myArr.terminal[0]*lar,3,0,Math.PI*2,true);
+  cxt.closePath();
+  cxt.fill()
+
+  if (index == 0 ) {
+    cxt.strokeStyle="#FF0000";
+    cxt.moveTo(10+myArr.path[0].y*lar,10+myArr.path[0].x*lar)
+    for(i = 0; i < myArr.path.length; i++) {
+      cxt.lineTo(10+myArr.path[i].y*lar,10+myArr.path[i].x*lar);
+    }
+    cxt.stroke();
+  }
+  if (index ==1 ) {
+    cxt.strokeStyle="#FF0000";
+    cxt.beginPath();
+    cxt.moveTo(10+myArr.path1[0].y*lar,10+myArr.path1[0].x*lar)
+    for(i = 0; i < myArr.path1.length; i++) {
+      cxt.lineTo(10+myArr.path1[i].y*lar,10+myArr.path1[i].x*lar);
+    }
+    cxt.stroke();
+    
+    cxt.beginPath();
+    cxt.arc(10+myArr.path1[0].y*lar,10+myArr.path1[0].x*lar,5,0,Math.PI*2,true);
+    cxt.closePath();
+    cxt.fill()
+
+    cxt.strokeStyle="#FF00FF";
+    cxt.beginPath();
+    cxt.moveTo(10+myArr.path2[0].y*lar,10+myArr.path2[0].x*lar)
+    for(i = 0; i < myArr.path2.length; i++) {
+      cxt.lineTo(10+myArr.path2[i].y*lar,10+myArr.path2[i].x*lar);
+    }
+    cxt.stroke();
+    
+  }
+  
+}
+
+function loadXMLDoc()
+{
+  var xmlhttp;
+  if (window.XMLHttpRequest)
+  {
+    // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+    xmlhttp=new XMLHttpRequest();
+  }
+  else
+  {
+    // IE6, IE5 浏览器执行代码
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function()
+  {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+      var myArr = JSON.parse(this.responseText);
+      document.getElementById("myDiv").innerHTML="ok";
+      myFunction(myArr,0)
+      myFunction(myArr,1)
+      // myFunction(myArr,1)
+      // myFunction(myArr,2)
+    }
+  }
+  xmlhttp.open("GET","http://localhost:8080/lab2",true);
+  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xmlhttp.send();
+}
+
+</script>
+</head>
+<body>
+
+<h2>AJAX JSON</h2>
+<button type="button" onclick="loadXMLDoc()">请求 JSON 数据</button>
+<div id="myDiv"></div>
+<h2>UnidirectionalA*</h2>
+<canvas id="myCanvas0" width="1010" height="505" style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+    
+<h2>TwoWayA*</h2>
+<canvas id="myCanvas1" width="1010" height="505" style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+</body>
+</html>

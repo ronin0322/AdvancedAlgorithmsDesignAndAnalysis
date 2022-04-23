@@ -10,7 +10,7 @@ function myFunction(myArr,index) {
   var cxt=c.getContext("2d");
   cxt.clearRect(0,0,c.width,c.height);
 
-  
+  if (myArr[index+3] == null) { return }
   cxt.fillStyle="#0000FF";
   for(i = 0; i < myArr[index+3].length; i++) {
     cxt.beginPath();
