@@ -3,6 +3,7 @@ module AdvancedAlgorithmsDesignAndAnalysis
 go 1.17
 
 require (
+	github.com/draffensperger/golp v0.0.0-20220125165800-1a05e30b4363
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.7.7
 )

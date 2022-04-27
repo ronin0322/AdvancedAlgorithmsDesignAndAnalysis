@@ -81,13 +81,13 @@ func DivideAndConquer(inNodes []lab1.Node, res [][]Node, wg *sync.WaitGroup) {
 }
 
 func lab1index(c *gin.Context) {
-	n := 3000
+	n := 100
 	inNodes := lab1.InitNode(n)
 	wg := sync.WaitGroup{}
-	wg.Add(2)
+	wg.Add(3)
 	res := make([][]Node, 6)
 
-	// go Simple(inNodes, res, &wg)
+	go Simple(inNodes, res, &wg)
 	go GrahamScan(inNodes, res, &wg)
 	go DivideAndConquer(inNodes, res, &wg)
 
