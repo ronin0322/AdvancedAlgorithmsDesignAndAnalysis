@@ -4,6 +4,7 @@ import (
 	"AdvancedAlgorithmsDesignAndAnalysis/lab1"
 	"AdvancedAlgorithmsDesignAndAnalysis/lab2"
 	"AdvancedAlgorithmsDesignAndAnalysis/lab3"
+	"AdvancedAlgorithmsDesignAndAnalysis/lab4"
 	"log"
 	"sync"
 
@@ -322,6 +323,25 @@ func lab3index(c *gin.Context) {
 
 }
 
+func lab4index(c *gin.Context) {
+	num := 100000
+	wg := sync.WaitGroup{}
+	groupNum := 10
+	wg.Add(groupNum)
+	qsSort := func(i int) {
+		qs := lab4.NewQuickSort()
+		qs.GenerateRandom(num*10, num*i)
+		qs.Qsort(0, len(qs.Arr))
+		// sort.Ints(qs.Arr)
+		wg.Done()
+	}
+	for i := 0; i < groupNum; i++ {
+		go qsSort(i)
+	}
+	wg.Wait()
+	c.JSON(200, "ok")
+}
+
 func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
@@ -329,6 +349,7 @@ func main() {
 	r.GET("/lab1", lab1index)
 	r.GET("/lab2", lab2index)
 	r.GET("/lab3", lab3index)
+	r.GET("/lab4", lab4index)
 	pprof.Register(r)
 	r.Run()
 }
