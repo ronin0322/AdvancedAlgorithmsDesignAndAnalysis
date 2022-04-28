@@ -10,26 +10,26 @@ func TestGenerateRandSlice(t *testing.T) {
 }
 
 func TestGenerateSubset(t *testing.T) {
-	sc := NewSetCover()
+	sc := NewSetCover(50, 10)
 	sc.GenerateSubset()
 	t.Log(sc.SubSets)
 }
 
 func TestGreedySetCover(t *testing.T) {
-	sc := NewSetCover()
+	sc := NewSetCover(50, 10)
 	sc.GenerateSubset()
 	t.Log(sc.SubSets)
 	t.Log(sc.GreedySetCover())
 }
 func TestLPSetCover(t *testing.T) {
-	sc := NewSetCover()
+	sc := NewSetCover(50, 10)
 	sc.GenerateSubset()
 	t.Log(sc.SubSets)
 	t.Log(sc.LPSetCover())
 }
 
 func TestSetCover(t *testing.T) {
-	sc := NewSetCover()
+	sc := NewSetCover(50, 10)
 	sc.GenerateSubset()
 	t.Log(sc.SubSets)
 	t.Log(sc.GreedySetCover())

@@ -15,11 +15,11 @@ type SetCover struct {
 	SubSets [][]int
 }
 
-func NewSetCover() *SetCover {
+func NewSetCover(nodeNum, setSize int) *SetCover {
 	rand.Seed(time.Now().UnixNano())
 	sc := &SetCover{}
-	sc.NodeNum = 50
-	sc.SetSize = 10
+	sc.NodeNum = nodeNum
+	sc.SetSize = setSize
 	// sc.SetNum = n
 	return sc
 }

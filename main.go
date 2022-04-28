@@ -3,6 +3,7 @@ package main
 import (
 	"AdvancedAlgorithmsDesignAndAnalysis/lab1"
 	"AdvancedAlgorithmsDesignAndAnalysis/lab2"
+	"AdvancedAlgorithmsDesignAndAnalysis/lab3"
 	"log"
 	"sync"
 
@@ -292,12 +293,42 @@ func lab2index(c *gin.Context) {
 
 }
 
+func lab3index(c *gin.Context) {
+	sc := lab3.NewSetCover(500, 20)
+	// sc := lab3.NewSetCover(5000, 20)
+	sc.GenerateSubset()
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+	greedySetCover := make(chan [][]int, 1)
+	lpSetCover := make(chan [][]int, 1)
+	GreedySC := func() {
+		greedySetCover <- sc.GreedySetCover()
+		wg.Done()
+	}
+	LPSC := func() {
+		lpSetCover <- sc.LPSetCover()
+		wg.Done()
+	}
+	go GreedySC()
+	go LPSC()
+	wg.Wait()
+	log.Println(sc.SetNum)
+	c.JSON(200, gin.H{
+		"allsubset":      sc.SubSets,
+		"greedysetcover": <-greedySetCover,
+		"lpsetcover":     <-lpSetCover,
+		"nodenum":        sc.NodeNum,
+	})
+
+}
+
 func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 	r.GET("/", index)
 	r.GET("/lab1", lab1index)
 	r.GET("/lab2", lab2index)
+	r.GET("/lab3", lab3index)
 	pprof.Register(r)
 	r.Run()
 }
