@@ -326,17 +326,18 @@ func lab3index(c *gin.Context) {
 func lab4index(c *gin.Context) {
 	num := 100000
 	wg := sync.WaitGroup{}
-	groupNum := 10
+	groupNum := 11
 	wg.Add(groupNum)
-	qsSort := func(i int) {
-		qs := lab4.NewQuickSort()
-		qs.GenerateRandom(num*10, num*i)
+	qsSort := func(qs *lab4.QuickSort) {
+		qs.TreQsort(0, len(qs.Arr))
 		qs.Qsort(0, len(qs.Arr))
 		// sort.Ints(qs.Arr)
 		wg.Done()
 	}
 	for i := 0; i < groupNum; i++ {
-		go qsSort(i)
+		qs := lab4.NewQuickSort()
+		qs.GenerateRandom(num*10, num*i)
+		go qsSort(qs)
 	}
 	wg.Wait()
 	c.JSON(200, "ok")
